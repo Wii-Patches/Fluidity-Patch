@@ -3,7 +3,6 @@
 *.wad
 *.app
 *.bak
-common-key.bin
 dols/
 dumps/
 build/

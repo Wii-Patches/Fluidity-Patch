@@ -148,7 +148,7 @@ def patch_wad(src, dst, key, which, patches=None, log=print):
 def find_key(explicit=None):
     cands = [explicit] if explicit else []
     here = os.path.dirname(HERE)
-    for d in (os.getcwd(), HERE, here, os.path.expanduser('~'), os.path.dirname(os.path.abspath(sys.argv[0]))):
+    for d in (os.getcwd(), HERE, os.path.join(HERE, 'prebuilt'), here, os.path.expanduser('~'), os.path.dirname(os.path.abspath(sys.argv[0]))):
         cands.append(os.path.join(d, 'common-key.bin'))
     for c in cands:
         if c and os.path.isfile(c) and os.path.getsize(c) == 16:

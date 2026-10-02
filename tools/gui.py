@@ -3,7 +3,7 @@
 
 Patches the game's main.dol for the options you tick and writes a new WAD next to the original
 (`<name> (CC+GC).wad`); the original is never touched.  Re-encrypting a WAD needs the Wii common key, which
-cannot be shipped: put a 16-byte `common-key.bin` next to the app, or choose one with the button.
+is bundled in prebuilt/; choose another with the button if needed.
 """
 import os
 import queue

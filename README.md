@@ -56,9 +56,9 @@ Vague Rant's mapping, unchanged (see his thread for the table).
 
 ### Patch your WAD
 
-You need a clean `.wad` of the game and the 16-byte Wii **common key**
-(`common-key.bin`), which a WAD can only be re-encrypted with and which cannot be
-distributed here. Download the patcher for your system from the releases page, or run
+You need a clean `.wad` of the game. The 16-byte Wii **common key**
+(`common-key.bin`), which a WAD is re-encrypted with, ships in `tools/prebuilt/`;
+pass `--key` to use another. Download the patcher for your system from the releases page, or run
 it from source (Python 3 with tkinter and `pycryptodome`):
 
 ```bash
@@ -69,7 +69,7 @@ python3 tools/gui.py
 Command line:
 
 ```bash
-python3 tools/patcher.py "Fluidity (USA).wad" "Fluidity (USA) patched.wad" --key common-key.bin [--no-gc] [--sharp]
+python3 tools/patcher.py "Fluidity (USA).wad" "Fluidity (USA) patched.wad" [--key common-key.bin] [--no-gc] [--sharp]
 ```
 
 The patcher recognises the stock game by its `main.dol`; other versions and WADs
