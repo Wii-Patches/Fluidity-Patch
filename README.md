@@ -95,7 +95,7 @@ Controller code plus the GameCube hook.
 ## Building from source
 
 With [devkitPPC](https://devkitpro.org/) and your own `main.dol` dumps
-(`python3 tools/getdol.py <wad> --key common-key.bin` extracts them into `dols/`):
+(`python3 tools/getdol.py <wad> common-key.bin dols/WFLE.dol` extracts them into `dols/`):
 
 ```bash
 python3 tools/gcbuild.py        # rebuilds tools/prebuilt/patches.json and codes/
