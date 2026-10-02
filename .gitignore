@@ -1,0 +1,18 @@
+# Never commit game binaries, keys, or anything derived from them.
+*.dol
+*.wad
+*.app
+*.bak
+common-key.bin
+dols/
+dumps/
+build/
+work/
+/tools/dist/
+dist/
+pyinst_dist/
+tools/prebuilt/patches_feed.json
+
+__pycache__/
+*.pyc
+.DS_Store

@@ -1,0 +1,2 @@
+Disable Copy Filter [WFLE]
+0417CB50 48000040

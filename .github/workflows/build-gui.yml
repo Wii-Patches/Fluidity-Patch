@@ -1,0 +1,109 @@
+name: Build GUI patcher
+
+on:
+  push: {}
+  workflow_dispatch: {}
+
+permissions:
+  contents: write
+
+jobs:
+  check:
+    runs-on: ubuntu-22.04
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Consistency checks
+        run: python3 tools/check.py
+
+  build:
+    needs: check
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - target: macos-universal
+            os: macos-14
+          - target: linux-x86_64
+            os: ubuntu-22.04
+          - target: windows-x86_64
+            os: windows-latest
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Verify tkinter is available
+        shell: bash
+        run: |
+          sudo apt-get install -y python3-tk 2>/dev/null || true
+          python -c "import tkinter; print('tkinter ok')"
+
+      - name: Install build tools
+        run: pip install pyinstaller tkinterdnd2 pycryptodome
+
+      - name: Build app (macOS)
+        if: matrix.target == 'macos-universal'
+        run: |
+          pyinstaller --name Fluidity-Patcher --windowed --noconfirm \
+            --collect-all tkinterdnd2 \
+            --paths tools --add-data tools/prebuilt:prebuilt --add-data assets/logo.png:assets \
+            --icon assets/icon.icns --target-architecture universal2 \
+            --distpath pyinst_dist tools/gui.py
+          cd pyinst_dist
+          zip -qr "../Fluidity-Patch-${{ matrix.target }}.zip" Fluidity-Patcher.app
+
+      - name: Build app (Linux)
+        if: matrix.target == 'linux-x86_64'
+        run: |
+          pyinstaller --name Fluidity-Patcher --windowed --noconfirm \
+            --collect-all tkinterdnd2 \
+            --paths tools --add-data tools/prebuilt:prebuilt --add-data assets/logo.png:assets \
+            --distpath pyinst_dist tools/gui.py
+          cd pyinst_dist
+          tar -czf "../Fluidity-Patch-${{ matrix.target }}.tar.gz" Fluidity-Patcher
+
+      - name: Build app (Windows)
+        if: matrix.target == 'windows-x86_64'
+        shell: bash
+        run: |
+          pyinstaller --name Fluidity-Patcher --windowed --noconfirm \
+            --collect-all tkinterdnd2 \
+            --paths tools --add-data "tools/prebuilt;prebuilt" --add-data "assets/logo.png;assets" \
+            --icon assets/icon.ico \
+            --distpath pyinst_dist tools/gui.py
+          cd pyinst_dist
+          7z a "../Fluidity-Patch-${{ matrix.target }}.zip" Fluidity-Patcher \
+            || powershell -Command "Compress-Archive -Path Fluidity-Patcher -DestinationPath ../Fluidity-Patch-${{ matrix.target }}.zip"
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: Fluidity-Patch-${{ matrix.target }}
+          path: Fluidity-Patch-${{ matrix.target }}.*
+
+      - name: Attach to release
+        if: startsWith(github.ref, 'refs/tags/')
+        uses: softprops/action-gh-release@v2
+        with:
+          files: Fluidity-Patch-${{ matrix.target }}.*
+
+  gecko-codes:
+    needs: check
+    runs-on: ubuntu-22.04
+    steps:
+      - uses: actions/checkout@v4
+      - name: Zip Gecko codes
+        run: zip -qr Fluidity-Patch-Gecko-Codes.zip codes
+      - uses: actions/upload-artifact@v4
+        with:
+          name: Fluidity-Patch-Gecko-Codes
+          path: Fluidity-Patch-Gecko-Codes.zip
+      - name: Attach to release
+        if: startsWith(github.ref, 'refs/tags/')
+        uses: softprops/action-gh-release@v2
+        with:
+          files: Fluidity-Patch-Gecko-Codes.zip

@@ -1,0 +1,2 @@
+Disable Copy Filter [WFLP]
+0417CC20 48000040
