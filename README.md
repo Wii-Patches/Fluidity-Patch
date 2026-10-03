@@ -127,3 +127,7 @@ No support will be provided for this tool.
 MIT — see [LICENSE](LICENSE).
 
 Copyright (c) 2026 quatric
+
+### Modded titles
+
+Fluidity and Hydroventure are identified by their four-character title ID (ID4). Executable patch-site checks still apply to modded WADs.
