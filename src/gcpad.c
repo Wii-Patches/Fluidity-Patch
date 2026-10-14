@@ -206,7 +206,8 @@ static inline s16 stick(u32 raw)
 }
 
 /* GameCube -> Classic Controller, laid out for Fluidity's Classic Controller scheme (Vague Rant):
- * A/B are the game's 2/1, X its A, Y/jump is the shake, L/R/D-pad steer menus and the cloud's wind. */
+ * A/B are the game's 2/1, X its A, R is the shake (jump, rain), L and Y are D-pad up (squirt water), so
+ * jumping and squirting stay under the fingers that hold the shoulder buttons. */
 static __attribute__((noinline)) u32 cc_buttons(u32 h)
 {
     u32 b = 0;
@@ -214,10 +215,10 @@ static __attribute__((noinline)) u32 cc_buttons(u32 h)
     if (h & 0x01000000u) b |= CL_A;          /* A: confirm / interact (2) */
     if (h & 0x02000000u) b |= CL_B;          /* B: cancel / gather (1) */
     if (h & 0x04000000u) b |= CL_X;          /* X: Wii A: zoom out, enter the playroom */
-    if (h & 0x08000000u) b |= CL_ZL | CL_ZR; /* Y: shake: jump, rain */
+    if (h & 0x08000000u) b |= CL_UP;         /* Y: D-pad up: squirt water */
     if (h & 0x10000000u) b |= CL_PLUS;       /* Start: pause / options */
-    if (h & 0x00400000u) b |= CL_L;          /* L: left */
-    if (h & 0x00200000u) b |= CL_R;          /* R: right */
+    if (h & 0x00400000u) b |= CL_UP;         /* L: D-pad up: squirt water */
+    if (h & 0x00200000u) b |= CL_ZL | CL_ZR; /* R: shake: jump, rain */
     if (h & 0x00080000u) b |= CL_UP;
     if (h & 0x00040000u) b |= CL_DOWN;
     if (h & 0x00020000u) b |= CL_RIGHT;
@@ -236,8 +237,8 @@ static __attribute__((noinline)) void fill_cc(u8 *s, u32 h, u32 l, u32 b)
     *(s16 *)(s + 0x2E) = stick(h);           /* control stick y */
     *(s16 *)(s + 0x30) = stick(l >> 24);     /* C-stick x */
     *(s16 *)(s + 0x32) = stick(l >> 16);     /* C-stick y */
-    s[0x34] = (h & 0x00400000u) ? 180 : 0;   /* digital L / R: the game reads them only as buttons */
-    s[0x35] = (h & 0x00200000u) ? 180 : 0;
+    s[0x34] = 0;                             /* analog L / R: the pad's shoulders are mapped to other buttons */
+    s[0x35] = 0;
     s[0x28] = 2;                             /* extension: Classic Controller */
     s[0x29] = 0;                             /* no extension error */
     s[0x40] = 8;                             /* data format: classic + accel + pointer */

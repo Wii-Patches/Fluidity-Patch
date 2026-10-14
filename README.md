@@ -40,9 +40,10 @@ real Wii** — see [On a real Wii](#on-a-real-wii).
 | A | Wii Remote 2 (confirm / interact) |
 | B | Wii Remote 1 (cancel / gather) |
 | X | Wii Remote A (zoom out, enter the playroom) |
-| Y | Shake (jump, rain) |
+| Y | D-pad up (squirt water) |
 | C-stick | Right stick: D-pad + 1 (Vague Rant's code) |
-| L / R | Menu left / right |
+| L | D-pad up (squirt water) |
+| R | Shake (jump, rain) |
 | D-pad | Menu navigation (sideways remote layout) |
 | Start | Pause / options (+) |
 | Z | Map / tutorial (−) |
