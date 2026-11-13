@@ -90,20 +90,3 @@ jobs:
         uses: softprops/action-gh-release@v2
         with:
           files: Fluidity-ISO-Patcher-${{ matrix.target }}.*
-
-  gecko-codes:
-    needs: check
-    runs-on: ubuntu-22.04
-    steps:
-      - uses: actions/checkout@v4
-      - name: Zip Gecko codes
-        run: zip -qr Fluidity-Patch-Gecko-Codes.zip codes
-      - uses: actions/upload-artifact@v4
-        with:
-          name: Fluidity-Patch-Gecko-Codes
-          path: Fluidity-Patch-Gecko-Codes.zip
-      - name: Attach to release
-        if: startsWith(github.ref, 'refs/tags/')
-        uses: softprops/action-gh-release@v2
-        with:
-          files: Fluidity-Patch-Gecko-Codes.zip
